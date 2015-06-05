@@ -1,19 +1,18 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import SoftLayer
 import yaml
 
-credsFile = open("softcreds.yaml",'r')
-creds = yaml.load(credsFile)
-
-
+creds_file = open("softcreds.yaml",'r')
+creds = yaml.load(creds_file)
 
 client = SoftLayer.Client(username=(creds['username']), api_key=(creds['api_key']))
 
-f = open('kill-file',' r')
-	
-	 
-	client['Virtual_Guest'].deleteObject(i)
+FH = open('kill-file','r')
 
-close('kill-file')
+kill_servers = FH.read().splitlines()
+for server in kill_servers:
+  print "Killing " + server
+  client['Virtual_Guest'].deleteObject(server)
 
+FH.close()
